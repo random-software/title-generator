@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Museum Title Generator</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="css/system.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/docs.css">
+  <!-- Bootstrap CSS -->
+  <!--  <link rel="stylesheet" href="https://unpkg.com/@sakun/system.css"/>-->
+
+  <style>
+
+      .container {
+          width: 80%;
+          margin: auto;
+          display: flex;
+          flex-direction: column;
+      }
+
+      .retro-font {
+          font-family: "Chicago_12";
+      }
+
+      .standard-dialog {
+          margin: 1rem;
+      }
+
+      #title {
+          font-size: 2.5rem;
+          min-height: 93px;
+      }
+      .modeless-dialog {
+          padding: 1rem 2rem
+      }
+      @media (max-width: 700px) {
+          .container {
+              width: 95%;
+          }
+          .dialog-text {
+              font-size: 0.8rem; /* adjust as needed */
+          }
+
+          .title-bar .title {
+              font-size: 1.1rem; /* adjust as needed */
+          }
+
+          #title {
+              font-size: 1.9rem; /* adjust as needed */
+              min-height: 140px;
+          }
+
+          .field-row {
+              display: flex;
+              flex-direction: column;
+          }
+          #generate {
+              margin-bottom: .5rem;
+          }
+
+      }
+  </style>
+</head>
+<body>
+
+<div class="container retro-font">
+
+  <div class="window">
+    <div class="title-bar">
+      <button aria-label="Close" class="close"></button>
+      <h1 class="title">Museum Title Generator</h1>
+      <button aria-label="Resize" disabled="" class="hidden"></button>
+    </div>
+    <div class="separator"></div>
+    <div class="modeless-dialog">
+      <!--    <h1 id="title" class="text-center"></h1>-->
+      <h2 id="title" class="retro-font center"></h2>
+      <section class="field-row" style="justify-content: flex-end">
+        <button class="btn" id="generate">Give me a new title</button>
+        <button class="btn btn-default" id="promote">I'd like more responsibilities for the same pay</button>
+      </section>
+    </div>
+  </div>
+  <div class="standard-dialog center">
+    <h1 class="dialog-text">Welcome to the Museum Job Title Generator, Version 1.0 (30 Jan 84)</h1>
+    <p class="dialog-text">&copy; 1984 Random Software</p>
+  </div>
+
+</div>
+
+<script>
+  function generateTitle() {
+    const option1 = ['Associate ', 'Associate Executive ', 'Executive ', 'Senior ', 'Principal ', ''];
+    const option2 = ['President of ', 'Vice-President of ', 'Director of ', 'Manager of ', 'Coordinator of '];
+    const option3 = ['Educational ', 'Financial ', 'Strategic ', 'Interpretation ', 'Operational ', 'Institutional ', 'Business ', 'Integrated ', 'Internal ', 'External '];
+    const option4 = ['Strategy', 'Communication', 'Interpretation', 'Implementation', 'Management', 'Advancement', 'Operations', 'Relations', 'Services', 'Analysis', 'Planning', 'Outreach', 'Programming', 'Engagement'];
+
+    return `${sample(option1)}${sample(option2)}${sample(option3)}${sample(option4)}`;
+  }
+
+  function promoteTitle(title) {
+    const option3 = ['Educational ', 'Financial ', 'Strategic ', 'Interpretation ', 'Operational ', 'Institutional ', 'Business ', 'Integrated ', 'Internal ', 'External '];
+    const option4 = ['Strategy', 'Communication', 'Interpretation', 'Implementation', 'Management', 'Advancement', 'Operations', 'Relations', 'Services', 'Analysis', 'Planning', 'Outreach', 'Programming', 'Engagement'];
+
+    if (option3.every(o => title.includes(o)) || option4.every(o => title.includes(o))) {
+      return title;
+    }
+
+    return `${title} and ${uniqueSampleOption(option3, title)} ${uniqueSampleOption(option4, title)}`;
+  }
+
+  function uniqueSampleOption(option, lastTitle) {
+    let optionSample = sample(option);
+
+    while (lastTitle.includes(optionSample)) {
+      optionSample = sample(option);
+    }
+    return optionSample;
+  }
+
+  function sample(array) {
+    return array[Math.floor(Math.random() * array.length)];
+  }
+
+  window.onload = function () {
+    let title = sessionStorage.getItem('title');
+    if (!title) {
+      title = generateTitle();
+      sessionStorage.setItem('title', title);
+    }
+    document.getElementById('title').innerText = title;
+
+    document.getElementById('generate').addEventListener('click', function (e) {
+      e.preventDefault();
+      const newTitle = generateTitle();
+      sessionStorage.setItem('title', newTitle);
+      document.getElementById('title').innerText = newTitle;
+    });
+
+    document.getElementById('promote').addEventListener('click', function (e) {
+      e.preventDefault();
+      const promotedTitle = promoteTitle(document.getElementById('title').innerText);
+      sessionStorage.setItem('title', promotedTitle);
+      document.getElementById('title').innerText = promotedTitle;
+    });
+  }
+</script>
+</body>
+</html>
