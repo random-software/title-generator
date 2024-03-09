@@ -81,7 +81,7 @@
     </div>
   </div>
   <div class="standard-dialog center">
-    <h1 class="dialog-text">Welcome to the Museum Job Title Generator, Version 1.0 (30 Jan 84)</h1>
+    <h1 class="dialog-text">Welcome to the Museum Job Title Generator, Version 1.1 (09 Mar 84)</h1>
     <p class="dialog-text">&copy; 1984 Random Software</p>
   </div>
 
@@ -91,21 +91,33 @@
   function generateTitle() {
     const option1 = ['Associate ', 'Associate Executive ', 'Executive ', 'Senior ', 'Principal ', ''];
     const option2 = ['President of ', 'Vice-President of ', 'Director of ', 'Manager of ', 'Coordinator of '];
-    const option3 = ['Educational ', 'Financial ', 'Strategic ', 'Interpretation ', 'Operational ', 'Institutional ', 'Business ', 'Integrated ', 'Internal ', 'External '];
+    const option3 = ['People & Culture', 'Educational ', 'Financial ', 'Strategic ', 'Interpretation ', 'Operational ', 'Institutional ', 'Business ', 'Integrated ', 'Internal ', 'External '];
     const option4 = ['Strategy', 'Communication', 'Interpretation', 'Implementation', 'Management', 'Advancement', 'Operations', 'Relations', 'Services', 'Analysis', 'Planning', 'Outreach', 'Programming', 'Engagement'];
 
-    return `${sample(option1)}${sample(option2)}${sample(option3)}${sample(option4)}`;
+    const qualifier = sample(option1);
+    const role = sample(option2);
+    let focus = sample(option3);
+    if (focus !== 'People & Culture') {
+      focus = `${focus}${sample(option4)}`;
+    }
+
+    return `${qualifier}${role}${focus}`;
   }
 
   function promoteTitle(title) {
-    const option3 = ['Educational ', 'Financial ', 'Strategic ', 'Interpretation ', 'Operational ', 'Institutional ', 'Business ', 'Integrated ', 'Internal ', 'External '];
+    const option3 = ['People & Culture', 'Educational ', 'Financial ', 'Strategic ', 'Interpretation ', 'Operational ', 'Institutional ', 'Business ', 'Integrated ', 'Internal ', 'External '];
     const option4 = ['Strategy', 'Communication', 'Interpretation', 'Implementation', 'Management', 'Advancement', 'Operations', 'Relations', 'Services', 'Analysis', 'Planning', 'Outreach', 'Programming', 'Engagement'];
 
     if (option3.every(o => title.includes(o)) || option4.every(o => title.includes(o))) {
       return title;
     }
 
-    return `${title} and ${uniqueSampleOption(option3, title)} ${uniqueSampleOption(option4, title)}`;
+    let focus = uniqueSampleOption(option3, title);
+    if (focus !== 'People & Culture') {
+      focus = `${focus}${uniqueSampleOption(option4, title)}`;
+    }
+
+    return `${title} and ${focus}`;
   }
 
   function uniqueSampleOption(option, lastTitle) {
